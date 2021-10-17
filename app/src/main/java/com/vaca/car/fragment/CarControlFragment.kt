@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.vaca.car.R
+import com.vaca.car.ble.BleCmd
 import com.vaca.car.ble.BleServer
 import com.vaca.car.databinding.FragmentCarControlBinding
 import com.vaca.car.net.Response
@@ -81,6 +82,7 @@ class CarControlFragment : Fragment() {
 
         binding.left.setOnJoystickMoveListener(object : JoystickView.OnJoystickMoveListener {
             override fun onValueChanged(angle: Int, power: Int, direction: Int) {
+                BleServer.dataWorker.sendCmd(BleCmd.reset())
                 val a1 = angle.toDouble() / 360.0 * 2.0 * Math.PI
                 val k1 = (Math.sin(a1)) * power.toDouble() / 200.0 * 500.0 + 1500.0
                 val k2 = (Math.cos(a1)) * power.toDouble() / 200.0 * 500.0 + 1500.0
@@ -93,6 +95,7 @@ class CarControlFragment : Fragment() {
 
         binding.right.setOnJoystickMoveListener(object : JoystickView.OnJoystickMoveListener {
             override fun onValueChanged(angle: Int, power: Int, direction: Int) {
+                BleServer.dataWorker.sendCmd(BleCmd.setWifi())
                 val a1 = angle.toDouble() / 360.0 * 2.0 * Math.PI
                 val k1 = (Math.sin(a1)) * power.toDouble()
                 val k11 = k1.toInt()
@@ -117,6 +120,11 @@ class CarControlFragment : Fragment() {
                 }
             )
         })
+
+        BleServer.dataScope.launch {
+            delay(10000)
+
+        }
 
         return binding.root
     }
