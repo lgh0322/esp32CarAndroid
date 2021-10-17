@@ -32,8 +32,6 @@ object BleServer {
                         connectFlag=true
                         dataWorker.initWorker(app,bluetoothDevice)
                     }
-
-
                 }
             }
         })
