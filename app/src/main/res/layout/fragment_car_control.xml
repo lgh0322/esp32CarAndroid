@@ -41,6 +41,7 @@
         android:layout_height="70dp"/>
 
     <TextView
+        android:visibility="invisible"
         android:id="@+id/ota"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
