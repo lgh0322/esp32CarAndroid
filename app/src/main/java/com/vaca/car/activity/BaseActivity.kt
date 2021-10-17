@@ -44,7 +44,7 @@ abstract class BaseActivity : AppCompatActivity() {
                 )
                 return false
             }else{
-                initA()
+                checkLocationSwitch()
             }
         }
         return true
@@ -64,7 +64,7 @@ abstract class BaseActivity : AppCompatActivity() {
                     }
                 }
                 if (mGrantedCount == permissions.size) {
-                    initA()
+                    checkLocationSwitch()
                 } else {
                     //  Toast.makeText(this, getString(R.string.common_please_input_roomid_and_userid), Toast.LENGTH_SHORT).show();
                 }
@@ -79,17 +79,17 @@ abstract class BaseActivity : AppCompatActivity() {
         protected const val REQ_PERMISSION_CODE = 0x1000
     }
 
-    fun initA() {
+    fun checkLocationSwitch() {
         if (!isLocationEnabled()) {
             val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
             startActivityForResult(intent, REQUEST_LOCATION)
         } else {
-            initB()
+            checkBleSwitch()
         }
 
     }
 
-    fun initB() {
+    fun checkBleSwitch() {
         val bluetoothManager =
             getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
         val bluetoothAdapter = bluetoothManager.adapter
@@ -132,9 +132,9 @@ abstract class BaseActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_LOCATION) {
-            initB()
+            checkBleSwitch()
         } else if (requestCode == REQUEST_ENABLE_BT) {
-            initB()
+            checkBleSwitch()
         }
     }
 
