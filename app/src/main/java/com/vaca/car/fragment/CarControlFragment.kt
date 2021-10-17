@@ -1,16 +1,9 @@
 package com.vaca.car.fragment
 
-import android.content.Context
 import android.graphics.*
 import android.hardware.camera2.*
-import android.media.Image
-import android.media.ImageReader
-import android.net.wifi.WifiManager
 import android.os.Bundle
-import android.os.Handler
-import android.os.HandlerThread
 import android.util.Log
-import android.util.Size
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,12 +20,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import java.io.ByteArrayInputStream
-import java.io.ByteArrayOutputStream
-import java.lang.Runnable
-import java.net.ServerSocket
-import java.net.Socket
 import java.util.*
-import kotlin.collections.ArrayList
 import kotlin.experimental.inv
 
 class CarControlFragment : Fragment() {
@@ -40,36 +28,35 @@ class CarControlFragment : Fragment() {
     val dataScope = CoroutineScope(Dispatchers.IO)
 
 
+    var pool: ByteArray? = null
 
-    var pool:ByteArray?=null
+    var carleft = 1500
+    var carright = 1500
 
-    var carleft=1500
-    var carright=1500
-
-    var carRunbase=1500
-    var carTurnbase=0
-
-
-    fun calcControl(){
-        carleft=carRunbase+carTurnbase
-        carright=carRunbase-carTurnbase
+    var carRunbase = 1500
+    var carTurnbase = 0
 
 
-        carright=3000-carright
+    fun calcControl() {
+        carleft = carRunbase + carTurnbase
+        carright = carRunbase - carTurnbase
+
+
+        carright = 3000 - carright
 
     }
 
-    fun controlCar(){
+    fun controlCar() {
         dataScope.launch {
             calcControl()
-            val b=ByteArray(4){
+            val b = ByteArray(4) {
                 0
             }
-            b[0]=carleft.and(0xff).toByte()
-            b[1]=carleft.shr(8).and(0xff).toByte()
-            b[2]=carright.and(0xff).toByte()
-            b[3]=carright.shr(8).and(0xff).toByte()
-            TcpClient.send(TcpCmd.carRun( b))
+            b[0] = carleft.and(0xff).toByte()
+            b[1] = carleft.shr(8).and(0xff).toByte()
+            b[2] = carright.and(0xff).toByte()
+            b[3] = carright.shr(8).and(0xff).toByte()
+            TcpClient.send(TcpCmd.carRun(b))
         }
     }
 
@@ -80,40 +67,39 @@ class CarControlFragment : Fragment() {
     ): View {
 
 
-
         binding = FragmentCarControlBinding.inflate(inflater, container, false)
 
         TcpClient.receive = object : TcpClient.Receive {
             override fun tcpReceive(byteArray: ByteArray) {
-                pool=add(pool,byteArray)
-                pool=poccessLinkData()
+                pool = add(pool, byteArray)
+                pool = poccessLinkData()
             }
         }
 
 
-        binding.left.setOnJoystickMoveListener(object : JoystickView.OnJoystickMoveListener{
+        binding.left.setOnJoystickMoveListener(object : JoystickView.OnJoystickMoveListener {
             override fun onValueChanged(angle: Int, power: Int, direction: Int) {
-                val a1=angle.toDouble()/360.0*2.0*Math.PI
-                val k1=(Math.sin(a1))*power.toDouble()/200.0*500.0+1500.0
-                val k2=(Math.cos(a1))*power.toDouble()/200.0*500.0+1500.0
-                val k22=k2.toInt()
-                Log.e("fuck1",k22.toString())
-                carRunbase=k22
+                val a1 = angle.toDouble() / 360.0 * 2.0 * Math.PI
+                val k1 = (Math.sin(a1)) * power.toDouble() / 200.0 * 500.0 + 1500.0
+                val k2 = (Math.cos(a1)) * power.toDouble() / 200.0 * 500.0 + 1500.0
+                val k22 = k2.toInt()
+                Log.e("fuck1", k22.toString())
+                carRunbase = k22
                 controlCar()
             }
-        },100)
+        }, 100)
 
-        binding.right.setOnJoystickMoveListener(object :JoystickView.OnJoystickMoveListener{
+        binding.right.setOnJoystickMoveListener(object : JoystickView.OnJoystickMoveListener {
             override fun onValueChanged(angle: Int, power: Int, direction: Int) {
-                val a1=angle.toDouble()/360.0*2.0*Math.PI
-                val k1=(Math.sin(a1))*power.toDouble()
-                val k11=k1.toInt()
-                Log.e("fuck1",k11.toString())
-                carTurnbase=k11
+                val a1 = angle.toDouble() / 360.0 * 2.0 * Math.PI
+                val k1 = (Math.sin(a1)) * power.toDouble()
+                val k11 = k1.toInt()
+                Log.e("fuck1", k11.toString())
+                carTurnbase = k11
                 controlCar()
             }
 
-        },100)
+        }, 100)
 
 
         binding.ota.setOnClickListener {
@@ -124,16 +110,13 @@ class CarControlFragment : Fragment() {
     }
 
 
-
-
-
-    fun poccessLinkData():ByteArray? {
-        var bytes =pool
-        while (true){
+    fun poccessLinkData(): ByteArray? {
+        var bytes = pool
+        while (true) {
             if (bytes == null || bytes.size < 11) {
                 break
             }
-            var con=false
+            var con = false
 
             loop@ for (i in 0 until bytes!!.size - 10) {
                 if (bytes!![i] != 0xA5.toByte() || bytes[i + 1] != bytes[i + 2].inv()) {
@@ -142,7 +125,7 @@ class CarControlFragment : Fragment() {
 
                 // need content length
                 val len = toUInt(bytes.copyOfRange(i + 6, i + 10))
-                if(len<0){
+                if (len < 0) {
                     continue@loop
                 }
                 if (i + 11 + len > bytes.size) {
@@ -151,22 +134,22 @@ class CarControlFragment : Fragment() {
 
                 val temp: ByteArray = bytes.copyOfRange(i, i + 11 + len)
                 if (temp.last() == CRCUtils.calCRC8(temp)) {
-                   onResponseReceived(Response(temp))
+                    onResponseReceived(Response(temp))
                     val tempBytes: ByteArray? =
                         if (i + 11 + len == bytes.size) null else bytes.copyOfRange(
                             i + 11 + len,
                             bytes.size
                         )
 
-                    bytes=tempBytes
-                    con=true
+                    bytes = tempBytes
+                    con = true
                     break@loop
                 }
             }
-            if(!con){
+            if (!con) {
                 return bytes
-            }else{
-                con=false
+            } else {
+                con = false
             }
 
         }
@@ -174,27 +157,26 @@ class CarControlFragment : Fragment() {
     }
 
 
-    val loc= Mutex()
+    val loc = Mutex()
 
-    fun onResponseReceived(x:Response){
-        when(x.cmd){
-            TcpCmd.CMD_READ_FILE_DATA->{
+    fun onResponseReceived(x: Response) {
+        when (x.cmd) {
+            TcpCmd.CMD_READ_FILE_DATA -> {
                 MainScope().launch {
                     loc.withLock {
-                        val bb=x.content.clone()
-                            val fg = BitmapFactory.decodeStream(ByteArrayInputStream(bb))
-                            if(fg!=null){
-                                binding.img.setImageBitmap(fg)
-                            }
+                        val bb = x.content.clone()
+                        val fg = BitmapFactory.decodeStream(ByteArrayInputStream(bb))
+                        if (fg != null) {
+                            binding.img.setImageBitmap(fg)
+                        }
                     }
                 }
             }
-            TcpCmd.CMD_READ_FILE_START->{
+            TcpCmd.CMD_READ_FILE_START -> {
 
             }
         }
     }
-
 
 
 }

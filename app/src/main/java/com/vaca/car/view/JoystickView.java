@@ -9,8 +9,6 @@ import android.view.MotionEvent;
 import android.view.View;
 
 public class JoystickView extends View implements Runnable {
-    // Constants
-    private final double RAD = 57.2957795;
     public final static long DEFAULT_LOOP_INTERVAL = 100; // 100 ms
     public final static int FRONT = 3;
     public final static int FRONT_RIGHT = 4;
@@ -20,6 +18,8 @@ public class JoystickView extends View implements Runnable {
     public final static int BOTTOM_LEFT = 8;
     public final static int LEFT = 1;
     public final static int LEFT_FRONT = 2;
+    // Constants
+    private final double RAD = 57.2957795;
     // Variables
     private OnJoystickMoveListener onJoystickMoveListener; // Listener
     private Thread thread = new Thread(this);
@@ -247,10 +247,6 @@ public class JoystickView extends View implements Runnable {
         this.loopInterval = repeatInterval;
     }
 
-    public interface OnJoystickMoveListener {
-        public void onValueChanged(int angle, int power, int direction);
-    }
-
     @Override
     public void run() {
         while (!Thread.interrupted()) {
@@ -267,5 +263,9 @@ public class JoystickView extends View implements Runnable {
                 break;
             }
         }
+    }
+
+    public interface OnJoystickMoveListener {
+        public void onValueChanged(int angle, int power, int direction);
     }
 }

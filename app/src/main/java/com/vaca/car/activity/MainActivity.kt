@@ -12,6 +12,6 @@ class MainActivity : BaseActivity() {
     }
 
     override fun onPermissionGranted() {
-        Log.e("fuck","fuckfuck")
+        Log.e("fuck", "fuckfuck")
     }
 }

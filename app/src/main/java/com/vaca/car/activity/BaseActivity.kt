@@ -5,14 +5,14 @@ import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothManager
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Build
 import android.content.pm.PackageManager
 import android.location.LocationManager
+import android.os.Build
 import android.provider.Settings
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import java.util.ArrayList
+import java.util.*
 
 abstract class BaseActivity : AppCompatActivity() {
     protected var mGrantedCount = 0
@@ -43,7 +43,7 @@ abstract class BaseActivity : AppCompatActivity() {
                     REQ_PERMISSION_CODE
                 )
                 return false
-            }else{
+            } else {
                 checkLocationSwitch()
             }
         }

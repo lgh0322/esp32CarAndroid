@@ -3,27 +3,18 @@ package com.vaca.car.ble
 
 import android.bluetooth.BluetoothDevice
 import android.content.Context
-import android.os.Handler
 import android.util.Log
-import androidx.lifecycle.MutableLiveData
 import com.vaca.car.MainApplication
-import com.vaca.car.activity.MainActivity
 import com.vaca.car.utils.CRCUtils
 import com.vaca.car.utils.add
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import no.nordicsemi.android.ble.callback.DataReceivedCallback
 import no.nordicsemi.android.ble.callback.FailCallback
 import no.nordicsemi.android.ble.data.Data
 import no.nordicsemi.android.ble.observer.ConnectionObserver
-import org.greenrobot.eventbus.EventBus
-import java.lang.System.currentTimeMillis
-import java.lang.Thread.sleep
 import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.experimental.inv
 
 class BleDataWorker {
 
@@ -50,10 +41,6 @@ class BleDataWorker {
     private val mutex = Mutex()
 
 
-
-
-
-
     var lock = Mutex()
 
     fun poccessSingleCmd(byteArray: ByteArray) {
@@ -65,8 +52,7 @@ class BleDataWorker {
 
     }
 
-    var linkData : ByteArray?=null
-
+    var linkData: ByteArray? = null
 
 
     private fun handleDataPool(bytes: ByteArray?): ByteArray? {
@@ -81,7 +67,7 @@ class BleDataWorker {
             }
 
             // need content length
-            val len = bytes[i+3].toUByte().toInt()
+            val len = bytes[i + 3].toUByte().toInt()
             if (i + 4 + len > bytes.size) {
                 continue@loop
             }
@@ -110,8 +96,8 @@ class BleDataWorker {
             if (valuex != null) {
                 dataScope.launch {
                     lock.withLock {
-                        linkData=add(linkData,valuex)
-                        linkData=handleDataPool(linkData)
+                        linkData = add(linkData, valuex)
+                        linkData = handleDataPool(linkData)
                     }
                 }
 
@@ -134,8 +120,8 @@ class BleDataWorker {
         myBleDataManager?.sendCmd(bs)
     }
 
-    var job:Job?=null
-    var jobStop=false
+    var job: Job? = null
+    var jobStop = false
 
     private val connectState = object : ConnectionObserver {
         override fun onDeviceConnecting(device: BluetoothDevice) {
@@ -143,7 +129,6 @@ class BleDataWorker {
         }
 
         override fun onDeviceConnected(device: BluetoothDevice) {
-
 
 
         }
@@ -167,8 +152,6 @@ class BleDataWorker {
     }
 
 
-
-
     fun initWorker(context: Context, bluetoothDevice: BluetoothDevice?) {
 
 
@@ -177,7 +160,6 @@ class BleDataWorker {
                 ?.useAutoConnect(false)
                 ?.retry(8, 100)
                 ?.done {
-
 
 
                 }?.fail(object : FailCallback {
@@ -199,7 +181,6 @@ class BleDataWorker {
         myBleDataManager?.setNotifyListener(comeData)
         myBleDataManager?.setConnectionObserver(connectState)
     }
-
 
 
     fun disconnect() {

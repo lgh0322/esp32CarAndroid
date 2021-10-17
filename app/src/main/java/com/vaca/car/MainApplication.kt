@@ -1,7 +1,6 @@
 package com.vaca.car
 
 import android.app.Application
-import android.util.Log
 
 
 class MainApplication : Application() {
@@ -13,8 +12,6 @@ class MainApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-
-
 
 
 //
