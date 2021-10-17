@@ -39,8 +39,7 @@ class CarControlFragment : Fragment() {
     lateinit var binding: FragmentCarControlBinding
     val dataScope = CoroutineScope(Dispatchers.IO)
 
-    lateinit var wifiManager: WifiManager
-    private val PORT = 9999
+
 
     var pool:ByteArray?=null
 
