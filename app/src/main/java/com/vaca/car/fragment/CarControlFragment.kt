@@ -15,17 +15,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.example.wifihot.BleServer
-import com.example.wifihot.BleServer.dataScope
-import com.example.wifihot.BleServer.socket
-import com.example.wifihot.Response
-import com.example.wifihot.TcpCmd
-import com.example.wifihot.databinding.FragmentMainBinding
-import com.example.wifihot.databinding.FragmentServerBinding
-import com.example.wifihot.utiles.CRCUtils
-import com.example.wifihot.utiles.add
-import com.example.wifihot.utiles.toUInt
-import com.example.wifihot.view.JoystickView
 import com.vaca.car.databinding.FragmentCarControlBinding
 import com.vaca.car.net.Response
 import com.vaca.car.net.TcpClient
