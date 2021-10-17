@@ -65,8 +65,6 @@ class BleScanManager {
     }
 
     fun start() {
-        var scanState = true
-
         val builder = ScanFilter.Builder()
         val filter = builder.build()
         try {
@@ -78,7 +76,6 @@ class BleScanManager {
     }
 
     fun stop() {
-        var scanState = false
         try {
             leScanner?.stopScan(leScanCallback)
         } catch (e: java.lang.Exception) {
