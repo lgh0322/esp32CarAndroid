@@ -8,6 +8,8 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.vaca.car.MainApplication
 import com.vaca.car.activity.MainActivity
+import com.vaca.car.utils.CRCUtils
+import com.vaca.car.utils.add
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.sync.Mutex
@@ -85,7 +87,7 @@ class BleDataWorker {
             }
 
             val temp: ByteArray = bytes.copyOfRange(i, i + 4 + len)
-            if (temp.last() == PC100cmd.getCRC(temp,temp.size)) {
+            if (temp.last() == CRCUtils.calCRC8(temp)) {
 
                 poccessSingleCmd(temp)
                 val tempBytes: ByteArray? =
@@ -141,17 +143,7 @@ class BleDataWorker {
         }
 
         override fun onDeviceConnected(device: BluetoothDevice) {
-            BleDataWorker.pc100Stack.clear()
-            Pc100Handler.removeCallbacksAndMessages(null)
-            Pc100Handler.postDelayed(
-                Pc100DataRunnerble, 1000
-            )
-            linkData=null
 
-            if(job==null){
-                jobStop=false
-
-            }
 
 
         }
@@ -174,15 +166,6 @@ class BleDataWorker {
 
     }
 
-    val receiveFirmware = object : DataReceivedCallback {
-        override fun onDataReceived(device: BluetoothDevice, data: Data) {
-            val byteArray = data.value
-            if (byteArray != null) {
-
-            }
-
-        }
-    }
 
 
 
@@ -220,7 +203,7 @@ class BleDataWorker {
 
 
     fun disconnect() {
-        BleServer.pc100ConnectFlag = false
+//        BleServer.pc100ConnectFlag = false
         myBleDataManager?.disconnect()?.enqueue()
     }
 }
