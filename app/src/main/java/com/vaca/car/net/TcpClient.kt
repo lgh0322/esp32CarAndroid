@@ -3,6 +3,7 @@ package com.vaca.car.net
 import android.util.Log
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.net.Socket
 
 object TcpClient {
@@ -48,14 +49,15 @@ object TcpClient {
 
 
     fun send(b:ByteArray){
-        try {
-            val output= socket.getOutputStream()
-            output.write(b)
-            output.flush()
-        }catch (e:java.lang.Exception){
+        dataScope.launch {
+            try {
+                val output= socket.getOutputStream()
+                output.write(b)
+                output.flush()
+            }catch (e:java.lang.Exception){
 
+            }
         }
-
     }
 
     fun byteArray2String(byteArray: ByteArray):String {

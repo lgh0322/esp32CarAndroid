@@ -27,6 +27,12 @@ import com.example.wifihot.utiles.add
 import com.example.wifihot.utiles.toUInt
 import com.example.wifihot.view.JoystickView
 import com.vaca.car.databinding.FragmentCarControlBinding
+import com.vaca.car.net.Response
+import com.vaca.car.net.TcpClient
+import com.vaca.car.net.TcpCmd
+import com.vaca.car.utils.CRCUtils
+import com.vaca.car.utils.add
+import com.vaca.car.utils.toUInt
 import com.vaca.car.view.JoystickView
 import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
@@ -89,12 +95,11 @@ class CarControlFragment : Fragment() {
 
         binding = FragmentCarControlBinding.inflate(inflater, container, false)
 
-        BleServer.receive = object : BleServer.Receive {
+        TcpClient.receive = object : TcpClient.Receive {
             override fun tcpReceive(byteArray: ByteArray) {
                 pool=add(pool,byteArray)
                 pool=poccessLinkData()
             }
-
         }
 
 
@@ -103,7 +108,6 @@ class CarControlFragment : Fragment() {
                 val a1=angle.toDouble()/360.0*2.0*Math.PI
                 val k1=(Math.sin(a1))*power.toDouble()/200.0*500.0+1500.0
                 val k2=(Math.cos(a1))*power.toDouble()/200.0*500.0+1500.0
-                val k11=k1.toInt()
                 val k22=k2.toInt()
                 Log.e("fuck1",k22.toString())
                 carRunbase=k22
@@ -115,9 +119,7 @@ class CarControlFragment : Fragment() {
             override fun onValueChanged(angle: Int, power: Int, direction: Int) {
                 val a1=angle.toDouble()/360.0*2.0*Math.PI
                 val k1=(Math.sin(a1))*power.toDouble()
-                val k2=(Math.cos(a1))*power.toDouble()
                 val k11=k1.toInt()
-                val k22=k2.toInt()
                 Log.e("fuck1",k11.toString())
                 carTurnbase=k11
                 controlCar()
@@ -127,9 +129,7 @@ class CarControlFragment : Fragment() {
 
 
         binding.ota.setOnClickListener {
-            BleServer.dataScope.launch {
-                BleServer.send(TcpCmd.carOTA())
-            }
+            TcpClient.send(TcpCmd.carOTA())
         }
 
         return binding.root
@@ -199,11 +199,6 @@ class CarControlFragment : Fragment() {
                                 binding.img.setImageBitmap(fg)
                             }
                     }
-
-//                    dataScope.launch {
-//                        BleServer.send("fuck".toByteArray())
-//                    }
-
                 }
             }
             TcpCmd.CMD_READ_FILE_START->{

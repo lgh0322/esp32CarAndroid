@@ -11,8 +11,6 @@ android {
         applicationId "com.vaca.car"
         minSdk 24
         targetSdk 31
-        versionCode 1
-        versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -33,6 +31,28 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
+    }
+
+    applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+            def outputFile = output.outputFile
+            def buildTypeName = ""
+
+            if (outputFile != null) {
+                if (outputFile.name.contains('release')) {
+                    buildTypeName += "release-"
+                } else if (outputFile.name.contains('debug')) {
+                    buildTypeName += "debug-"
+                }
+
+            }
+
+            def fileName = "LittlePu-" +
+                    "${buildTypeName}" +
+                    "${variant.versionName}" +
+                    ".apk"
+            outputFileName = fileName
+        }
     }
 }
 
