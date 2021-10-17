@@ -1,5 +1,6 @@
 package com.vaca.car.activity
 
+import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothManager
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
@@ -9,11 +10,14 @@ import com.vaca.car.R
 import com.vaca.car.ble.BleServer
 import com.vaca.car.pop.O2RingDialog
 import com.vaca.car.utils.Tts
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 class MainActivity : BaseActivity() {
+    companion object{
+        lateinit var mBluetoothAdapter: BluetoothAdapter
+    }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -26,7 +30,16 @@ class MainActivity : BaseActivity() {
     }
 
     override fun onPermissionGranted() {
-        Log.e("fuck", "fuckfuck")
+        runBlocking {
+            ScanBle()
+        }
+
+        GlobalScope.launch {
+
+                delay(1000)
+                BleServer.scan.start()
+
+        }
 
     }
 
@@ -40,7 +53,7 @@ class MainActivity : BaseActivity() {
         if (!mBluetoothAdapter.isEnabled) {
             mBluetoothAdapter.enable()
         } else {
-            bleHandler.postDelayed(bleTask,1000)
+
         }
     }
 }
