@@ -81,7 +81,7 @@ class CarControlFragment : Fragment() {
             b[1]=carleft.shr(8).and(0xff).toByte()
             b[2]=carright.and(0xff).toByte()
             b[3]=carright.shr(8).and(0xff).toByte()
-            BleServer.send(TcpCmd.carRun( b))
+            TcpClient.send(TcpCmd.carRun( b))
         }
     }
 
