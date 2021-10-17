@@ -129,7 +129,7 @@ class BleDataWorker {
         }
 
         override fun onDeviceConnected(device: BluetoothDevice) {
-
+            BleServer.connectLiveFlag.postValue(true)
 
         }
 
@@ -142,11 +142,12 @@ class BleDataWorker {
         }
 
         override fun onDeviceDisconnecting(device: BluetoothDevice) {
-            myBleDataManager?.refreshDeviceCache()?.enqueue()
+
         }
 
         override fun onDeviceDisconnected(device: BluetoothDevice, reason: Int) {
-
+            BleServer.connectFlag=false
+            BleServer.connectLiveFlag.postValue(false)
         }
 
     }
@@ -164,7 +165,8 @@ class BleDataWorker {
 
                 }?.fail(object : FailCallback {
                     override fun onRequestFailed(device: BluetoothDevice, status: Int) {
-
+                        BleServer.connectFlag=false
+                        BleServer.connectLiveFlag.postValue(false)
                     }
 
                 })
@@ -184,7 +186,6 @@ class BleDataWorker {
 
 
     fun disconnect() {
-//        BleServer.pc100ConnectFlag = false
         myBleDataManager?.disconnect()?.enqueue()
     }
 }
