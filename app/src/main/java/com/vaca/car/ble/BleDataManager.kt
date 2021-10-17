@@ -22,7 +22,7 @@ class BleDataManager(context: Context) : BleManager(context) {
     }
 
     fun sendCmd(bytes: ByteArray?) {
-        writeCharacteristic(write_char, bytes)
+        writeCharacteristic(write_char, bytes,BluetoothGattCharacteristic.WRITE_TYPE_NO_RESPONSE)
             .split()
             .enqueue()
     }
