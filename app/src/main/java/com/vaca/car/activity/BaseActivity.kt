@@ -1,4 +1,4 @@
-package com.vaca.car
+package com.vaca.car.activity
 
 import android.Manifest
 import android.bluetooth.BluetoothAdapter
@@ -12,10 +12,9 @@ import android.location.LocationManager
 import android.provider.Settings
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.vaca.car.TRTCBaseActivity
 import java.util.ArrayList
 
-abstract class TRTCBaseActivity : AppCompatActivity() {
+abstract class BaseActivity : AppCompatActivity() {
     protected var mGrantedCount = 0
     protected abstract fun onPermissionGranted()
     protected fun checkPermission(): Boolean {
@@ -39,7 +38,7 @@ abstract class TRTCBaseActivity : AppCompatActivity() {
 //            }
             if (permissions.size != 0) {
                 ActivityCompat.requestPermissions(
-                    this@TRTCBaseActivity,
+                    this@BaseActivity,
                     permissions.toTypedArray(),
                     REQ_PERMISSION_CODE
                 )

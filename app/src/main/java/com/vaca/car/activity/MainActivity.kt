@@ -1,10 +1,10 @@
-package com.vaca.car
+package com.vaca.car.activity
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import com.vaca.car.R
 
-class MainActivity : TRTCBaseActivity() {
+class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
