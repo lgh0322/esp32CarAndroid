@@ -6,6 +6,7 @@ import android.content.Context
 import android.util.Log
 import com.vaca.car.MainApplication
 import com.vaca.car.utils.CRCUtils
+import com.vaca.car.utils.Tts
 import com.vaca.car.utils.add
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
@@ -130,7 +131,7 @@ class BleDataWorker {
 
         override fun onDeviceConnected(device: BluetoothDevice) {
             BleServer.connectLiveFlag.postValue(true)
-
+            Tts.speak("蓝牙已连接")
         }
 
         override fun onDeviceFailedToConnect(device: BluetoothDevice, reason: Int) {
@@ -148,6 +149,7 @@ class BleDataWorker {
         override fun onDeviceDisconnected(device: BluetoothDevice, reason: Int) {
             BleServer.connectFlag=false
             BleServer.connectLiveFlag.postValue(false)
+            Tts.speak("蓝牙已断开")
         }
 
     }

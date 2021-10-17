@@ -8,6 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.vaca.car.R
+import com.vaca.car.ble.BleServer
 import com.vaca.car.databinding.FragmentCarControlBinding
 import com.vaca.car.net.Response
 import com.vaca.car.net.TcpClient
@@ -105,6 +107,16 @@ class CarControlFragment : Fragment() {
         binding.ota.setOnClickListener {
             TcpClient.send(TcpCmd.carOTA())
         }
+
+        BleServer.connectLiveFlag.observe(viewLifecycleOwner,{
+            binding.bleState.setImageResource(
+                if (it) {
+                    R.drawable.ble_connect
+                } else {
+                    R.drawable.ble_off
+                }
+            )
+        })
 
         return binding.root
     }
