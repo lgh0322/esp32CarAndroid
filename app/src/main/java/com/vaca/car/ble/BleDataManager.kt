@@ -12,40 +12,31 @@ import no.nordicsemi.android.ble.data.Data
 import java.util.*
 
 class BleDataManager(context: Context) : BleManager(context) {
-
     private var listener: OnNotifyListener? = null
     fun setNotifyListener(listener: OnNotifyListener?) {
         this.listener = listener
     }
-
     override fun getGattCallback(): BleManagerGattCallback {
         return MyManagerGattCallback()
     }
-
     fun sendCmd(bytes: ByteArray?) {
         writeCharacteristic(write_char, bytes)
             .split()
             .enqueue()
     }
-
     public override fun refreshDeviceCache(): Request {
         return super.refreshDeviceCache()
     }
-
     override fun shouldClearCacheWhenDisconnected(): Boolean {
         return true
     }
-
-
     public override fun readCharacteristic(characteristic: BluetoothGattCharacteristic?): ReadRequest {
         return super.readCharacteristic(characteristic)
     }
-
     override fun log(priority: Int, message: String) {}
     interface OnNotifyListener {
         fun onNotify(device: BluetoothDevice?, data: Data?)
     }
-
     /**
      * BluetoothGatt callbacks object.
      */
@@ -55,13 +46,6 @@ class BleDataManager(context: Context) : BleManager(context) {
                write_char = getCharacteristic(write_uuid)
                notify_char =getCharacteristic(notify_uuid)
            }
-
-            gatt.getService(device_service_uuid)?.run {
-                firmware_char =getCharacteristic(firmware_uuid)
-                model_char =getCharacteristic(model_uuid)
-            }
-
-
             return true
         }
 
@@ -70,7 +54,6 @@ class BleDataManager(context: Context) : BleManager(context) {
         override fun isOptionalServiceSupported(gatt: BluetoothGatt): Boolean {
             return super.isOptionalServiceSupported(gatt)
         }
-
         // Initialize your device here. Often you need to enable notifications and set required
         // MTU or write some initial data. Do it here.
         override fun initialize() {
@@ -113,9 +96,6 @@ class BleDataManager(context: Context) : BleManager(context) {
         val notify_uuid: UUID = UUID.fromString("0000fff1-0000-1000-8000-00805f9b34fb")
 
 
-        val device_service_uuid :UUID = UUID.fromString("0000180a-0000-1000-8000-00805f9b34fb")
-        val model_uuid :UUID = UUID.fromString("00002a24-0000-1000-8000-00805f9b34fb")
-        val firmware_uuid :UUID = UUID.fromString("00002a26-0000-1000-8000-00805f9b34fb")
 
 
         var write_char: BluetoothGattCharacteristic? = null
