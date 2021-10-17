@@ -46,6 +46,14 @@ class MainActivity : BaseActivity() {
         })
 
         checkPermission()
+
+        BleServer.connectLiveFlag.observe(this,{
+            if(it){
+                BleServer.scan.stop()
+            }else{
+                BleServer.scan.start()
+            }
+        })
     }
 
     override fun onPermissionGranted() {
@@ -53,15 +61,7 @@ class MainActivity : BaseActivity() {
             ScanBle()
         }
 
-        GlobalScope.launch {
-            while (true){
-                delay(20000)
-                BleServer.scan.stop()
-                delay(4000)
-                BleServer.scan.start()
-            }
-        }
-
+        BleServer.scan.start()
     }
 
     suspend fun ScanBle(){
