@@ -6,6 +6,144 @@
     android:layout_height="match_parent"
     android:background="#F0FAFA"
     tools:context=".activity.MainActivity">
+    <androidx.cardview.widget.CardView
+
+        android:layout_width="440dp"
+        android:layout_height="120dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:elevation="5dp"
+        app:cardCornerRadius="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/icon"
+                android:layout_width="41.52dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="52dp"
+                android:layout_marginBottom="4dp"
+                android:src="@drawable/small_pc200"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+
+            <ImageView
+                android:id="@+id/ble_state"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="228dp"
+                android:layout_marginBottom="15dp"
+                android:src="@drawable/ble_off"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <View
+                android:id="@+id/barrier"
+                android:layout_width="1dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="207dp"
+                android:layout_marginBottom="15dp"
+                android:background="#ffbdc2ce"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/pr_bind"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="127dp"
+                android:layout_marginBottom="19dp"
+                android:text=""
+                android:textColor="#27D6C0"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <View
+                android:id="@+id/barrier2"
+                android:layout_width="409dp"
+                android:layout_height="1dp"
+                android:background="#ffbdc2ce"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/head"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="12dp"
+                android:src="@drawable/head_stable"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="61dp"
+                android:layout_marginTop="15dp"
+                android:text="当前成员："
+                android:textColor="@color/login_hint_black"
+                android:textSize="24sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/nick"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="239dp"
+                android:layout_marginTop="10dp"
+                android:text="默认用户"
+                android:textColor="#1EBE32"
+                android:textSize="30sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <com.vaca.car.view.DeviceBatteryView
+                android:id="@+id/device_battery_view"
+                android:layout_width="36dp"
+                android:layout_height="18dp"
+                android:layout_marginStart="270dp"
+                android:layout_marginBottom="22dp"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+            <ImageView
+                android:id="@+id/device_battery_view_charge"
+                android:src="@drawable/smail_in_charge"
+                android:layout_width="36dp"
+                android:layout_height="18dp"
+                android:layout_marginStart="270dp"
+                android:layout_marginBottom="22dp"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/device_battery"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="314dp"
+                android:layout_marginBottom="18dp"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
 
     <TextView
         android:id="@+id/fps"
@@ -27,16 +165,16 @@
 
     <com.vaca.car.view.JoystickView
         android:id="@+id/left"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.vaca.car.view.JoystickView
         android:id="@+id/right"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
