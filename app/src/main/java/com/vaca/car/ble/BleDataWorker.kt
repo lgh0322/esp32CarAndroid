@@ -6,6 +6,7 @@ import android.content.Context
 import android.os.Handler
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import com.vaca.car.MainApplication
 import com.vaca.car.activity.MainActivity
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
@@ -47,29 +48,6 @@ class BleDataWorker {
     private val mutex = Mutex()
 
 
-    private var cmdState = 0;
-    var pkgTotal = 0;
-    var currentPkg = 0;
-    var fileData: ByteArray? = null
-    var currentFileName = ""
-    var result = 1;
-    var currentFileSize = 0
-    var lastMill = 0L
-    var startMill = 0L
-
-
-    var lastMill2 = 0L
-    var endSeven = false
-    var isInvalidData=false
-    var invalidTime=0L
-
-
-    companion object {
-        val pc200Battery = MutableLiveData<Int>()
-        val pc100Stack = ArrayList<Pc100Data>()
-        val Pc100Handler = Handler()
-        var startPcMeasureTime = 0L
-    }
 
 
 
