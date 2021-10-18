@@ -177,6 +177,18 @@
 
     </LinearLayout>
 
+    <com.vaca.car.view.CircularProgressView
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:padding="30dp"
+        app:backColor="@color/red"
+        app:backWidth="20dp"
+        app:progColor="@color/Green"
+        app:progWidth="20dp"
+        app:progress="65" />
+
 
 
 
