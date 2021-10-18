@@ -165,6 +165,7 @@
 
     <com.vaca.car.view.JoystickView
         android:id="@+id/left"
+        android:layout_marginStart="100dp"
         android:layout_width="200dp"
         android:layout_height="200dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -173,6 +174,7 @@
 
     <com.vaca.car.view.JoystickView
         android:id="@+id/right"
+        android:layout_marginEnd="100dp"
         android:layout_width="200dp"
         android:layout_height="200dp"
         app:layout_constraintBottom_toBottomOf="parent"
