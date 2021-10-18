@@ -3,10 +3,13 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/ligh1/AndroidStudioProjects/esp32Car/app/src/main/res/drawable-v24/pop_bg.xml" value="0.21666666666666667" />
+        <entry key="..\:/ligh1/AndroidStudioProjects/esp32Car/app/src/main/res/drawable-v24/room_input_bg.xml" value="0.1890625" />
         <entry key="..\:/ligh1/AndroidStudioProjects/esp32Car/app/src/main/res/drawable-v24/vertical_volume.xml" value="0.14114583333333333" />
         <entry key="..\:/ligh1/AndroidStudioProjects/esp32Car/app/src/main/res/layout/activity_main.xml" value="0.10833333333333334" />
         <entry key="..\:/ligh1/AndroidStudioProjects/esp32Car/app/src/main/res/layout/fragment_car_control.xml" value="0.12708333333333333" />
         <entry key="..\:/ligh1/AndroidStudioProjects/esp32Car/app/src/main/res/layout/o2ring_dialog.xml" value="0.125" />
+        <entry key="..\:/ligh1/AndroidStudioProjects/esp32Car/app/src/main/res/layout/pop_wifi.xml" value="0.23007246376811594" />
       </map>
     </option>
   </component>

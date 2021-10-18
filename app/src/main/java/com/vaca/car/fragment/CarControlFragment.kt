@@ -4,6 +4,7 @@ import android.graphics.*
 import android.hardware.camera2.*
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +16,7 @@ import com.vaca.car.databinding.FragmentCarControlBinding
 import com.vaca.car.net.Response
 import com.vaca.car.net.TcpClient
 import com.vaca.car.net.TcpCmd
+import com.vaca.car.pop.WifiPop
 import com.vaca.car.utils.CRCUtils
 import com.vaca.car.utils.add
 import com.vaca.car.utils.toUInt
@@ -63,6 +65,8 @@ class CarControlFragment : Fragment() {
         }
     }
 
+    var wifiPop:WifiPop?=null
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -71,6 +75,19 @@ class CarControlFragment : Fragment() {
 
 
         binding = FragmentCarControlBinding.inflate(inflater, container, false)
+
+
+
+
+        wifiPop= WifiPop(requireContext())
+        MainScope().launch {
+            delay(200)
+            wifiPop?.showAtLocation(binding.root,Gravity.CENTER,0,0)
+        }
+
+
+
+
 
         TcpClient.receive = object : TcpClient.Receive {
             override fun tcpReceive(byteArray: ByteArray) {
