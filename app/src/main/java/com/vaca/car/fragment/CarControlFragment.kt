@@ -72,44 +72,9 @@ class CarControlFragment : Fragment() {
 
         binding = FragmentCarControlBinding.inflate(inflater, container, false)
 
-        TcpClient.receive = object : TcpClient.Receive {
-            override fun tcpReceive(byteArray: ByteArray) {
-                pool = add(pool, byteArray)
-                pool = poccessLinkData()
-            }
-        }
 
 
-        binding.left.setOnJoystickMoveListener(object : JoystickView.OnJoystickMoveListener {
-            override fun onValueChanged(angle: Int, power: Int, direction: Int) {
-                BleServer.dataWorker.sendCmd(BleCmd.reset())
-                val a1 = angle.toDouble() / 360.0 * 2.0 * Math.PI
-                val k1 = (Math.sin(a1)) * power.toDouble() / 200.0 * 500.0 + 1500.0
-                val k2 = (Math.cos(a1)) * power.toDouble() / 200.0 * 500.0 + 1500.0
-                val k22 = k2.toInt()
-                Log.e("fuck1", k22.toString())
-                carRunbase = k22
-                controlCar()
-            }
-        }, 100)
 
-        binding.right.setOnJoystickMoveListener(object : JoystickView.OnJoystickMoveListener {
-            override fun onValueChanged(angle: Int, power: Int, direction: Int) {
-                BleServer.dataWorker.sendCmd(BleCmd.setWifi())
-                val a1 = angle.toDouble() / 360.0 * 2.0 * Math.PI
-                val k1 = (Math.sin(a1)) * power.toDouble()
-                val k11 = k1.toInt()
-                Log.e("fuck1", k11.toString())
-                carTurnbase = k11
-                controlCar()
-            }
-
-        }, 100)
-
-
-        binding.ota.setOnClickListener {
-            TcpClient.send(TcpCmd.carOTA())
-        }
 
         BleServer.connectLiveFlag.observe(viewLifecycleOwner,{
             binding.bleState.setImageResource(
@@ -121,82 +86,12 @@ class CarControlFragment : Fragment() {
             )
         })
 
-        BleServer.dataScope.launch {
-            delay(10000)
 
-        }
 
         return binding.root
     }
 
 
-    fun poccessLinkData(): ByteArray? {
-        var bytes = pool
-        while (true) {
-            if (bytes == null || bytes.size < 11) {
-                break
-            }
-            var con = false
-
-            loop@ for (i in 0 until bytes!!.size - 10) {
-                if (bytes!![i] != 0xA5.toByte() || bytes[i + 1] != bytes[i + 2].inv()) {
-                    continue@loop
-                }
-
-                // need content length
-                val len = toUInt(bytes.copyOfRange(i + 6, i + 10))
-                if (len < 0) {
-                    continue@loop
-                }
-                if (i + 11 + len > bytes.size) {
-                    continue@loop
-                }
-
-                val temp: ByteArray = bytes.copyOfRange(i, i + 11 + len)
-                if (temp.last() == CRCUtils.calCRC8(temp)) {
-                    onResponseReceived(Response(temp))
-                    val tempBytes: ByteArray? =
-                        if (i + 11 + len == bytes.size) null else bytes.copyOfRange(
-                            i + 11 + len,
-                            bytes.size
-                        )
-
-                    bytes = tempBytes
-                    con = true
-                    break@loop
-                }
-            }
-            if (!con) {
-                return bytes
-            } else {
-                con = false
-            }
-
-        }
-        return null
-    }
-
-
-    val loc = Mutex()
-
-    fun onResponseReceived(x: Response) {
-        when (x.cmd) {
-            TcpCmd.CMD_READ_FILE_DATA -> {
-                MainScope().launch {
-                    loc.withLock {
-                        val bb = x.content.clone()
-                        val fg = BitmapFactory.decodeStream(ByteArrayInputStream(bb))
-                        if (fg != null) {
-                            binding.img.setImageBitmap(fg)
-                        }
-                    }
-                }
-            }
-            TcpCmd.CMD_READ_FILE_START -> {
-
-            }
-        }
-    }
 
 
 }
